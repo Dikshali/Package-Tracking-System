@@ -260,6 +260,8 @@ public class Mainscreen extends JApplet {
 				/*if(comboBox_1.getSelectedIndex() == comboBox_2.getSelectedIndex()) {
 					infoBox("Source and Destination cannot be same", "Error");
 				}*/
+				
+				
 				int result=0;
 				String weight=textField_3.getText();
 				boolean signatureRequired=rdbtnSignatureRequired.isSelected();

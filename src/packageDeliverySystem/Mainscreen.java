@@ -2,33 +2,24 @@ package packageDeliverySystem;
 
 import javax.swing.JApplet;
 import javax.swing.JLabel;
-import java.awt.BorderLayout;
 import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.text.NumberFormat;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.awt.event.ActionEvent;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.JLayeredPane;
 import javax.swing.JTextField;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFormattedTextField;
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.RescaleOp;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-import javax.swing.JInternalFrame;
-import javax.swing.JScrollPane;
 import java.awt.Rectangle;
 
 public class Mainscreen extends JApplet {
@@ -37,13 +28,8 @@ public class Mainscreen extends JApplet {
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField textField;
-	/**
-	 * Create the applet.
-	 */
-	/*public static void infoBox(String infoMessage, String titleBar)
-    {
-        JOptionPane.showMessageDialog(null, infoMessage, "InfoBox: " + titleBar, JOptionPane.INFORMATION_MESSAGE);
-    }*/
+	static BlockingQueue<Shortest> bbcp = new ArrayBlockingQueue<>(10);
+	static ExecutorService pool = Executors.newFixedThreadPool(2);
 	
 	public Mainscreen() {
 		setBounds(new Rectangle(0, 0, 1000, 1000));
@@ -200,7 +186,9 @@ public class Mainscreen extends JApplet {
 		
 		btnTrackPack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnNew.setEnabled(false);
+				TrackPackage trackPackage = new TrackPackage(Integer.parseInt(textField.getText()));
+				PackageModel pm = trackPackage.getShippingDetails();
+				System.out.println(pm);
 			}
 		});
 		
@@ -257,31 +245,30 @@ public class Mainscreen extends JApplet {
 		
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*if(comboBox_1.getSelectedIndex() == comboBox_2.getSelectedIndex()) {
-					infoBox("Source and Destination cannot be same", "Error");
-				}*/
-				
-				
 				int result=0;
-				String weight=textField_3.getText();
-				boolean signatureRequired=rdbtnSignatureRequired.isSelected();
-				String packageType=comboBox_3.getSelectedItem().toString();
-				String quantity=textField_4.getText();
-				String senderName=textField_1.getText();
-				String receiverName=textField_2.getText();
-				String source=comboBox_1.getSelectedItem().toString();
-				String destination=comboBox_2.getSelectedItem().toString();
-				String specialServices=textArea.getText();
-				Createpackage c = new Createpackage();
 				try {
-					result= c.insertPackage(senderName, receiverName, source, destination, packageType, weight, quantity, signatureRequired, specialServices);
-					c.createPath(source, destination, result);
+					String weight=textField_3.getText();
+					boolean signatureRequired=rdbtnSignatureRequired.isSelected();
+					String packageType=comboBox_3.getSelectedItem().toString();
+					String quantity=textField_4.getText();
+					String senderName=textField_1.getText();
+					String receiverName=textField_2.getText();
+					String source=comboBox_1.getSelectedItem().toString();
+					String destination=comboBox_2.getSelectedItem().toString();
+					String specialServices=textArea.getText();
+					Timestamp d = new Timestamp(new Date().getTime());
+					PackageModel packageModel = new PackageModel(senderName, receiverName, source, destination, packageType, weight, quantity, signatureRequired, specialServices,d,d);
+					Createpackage c = new Createpackage(packageModel);
+					result = c.insertPackage();
+					packageModel.setTrackingId(result);
+					lblNewLabel_9.setText("Tracking Number: "+result);
+					btnCreate.setEnabled(false);
+					Runnable shortestRunnableObject = new Shortest(packageModel);
+					pool.execute(shortestRunnableObject);
+					
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				lblNewLabel_9.setText("Tracking Number: "+result);
-				btnCreate.setEnabled(false);
-				//System.out.println(result);
 			}
 		});
 		

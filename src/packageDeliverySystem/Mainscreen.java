@@ -1,10 +1,9 @@
 package packageDeliverySystem;
 
-import javax.swing.JApplet;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.JButton;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -12,15 +11,20 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.awt.event.ActionEvent;
-import javax.swing.JLayeredPane;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JRadioButton;
-import javax.swing.JTextArea;
+
 import javax.swing.DefaultComboBoxModel;
-import java.awt.Dimension;
-import java.awt.Rectangle;
+import javax.swing.JApplet;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 public class Mainscreen extends JApplet {
 	private JTextField textField_1;
@@ -52,10 +56,8 @@ public class Mainscreen extends JApplet {
 		getContentPane().add(btnTrack);
 		
 		JLayeredPane layeredPane1 = new JLayeredPane();
-		layeredPane1.setBounds(61, 72, 450, 201);
-		//layeredPane1.setBounds(10, 88, 430, 201);
-		layeredPane1.setEnabled(false);
 		layeredPane1.setVisible(false);
+		layeredPane1.setBounds(61, 72, 450, 201);
 		getContentPane().add(layeredPane1);
 		
 		JLabel lblNewLabel_1 = new JLabel("Sender Name");
@@ -152,9 +154,9 @@ public class Mainscreen extends JApplet {
 		layeredPane1.add(lblNewLabel_9);
 		
 		JLayeredPane layeredPane2 = new JLayeredPane();
-		layeredPane2.setBounds(27, 284, 521, 249);
+		layeredPane2.setBounds(10, 325, 580, 319);
 		getContentPane().add(layeredPane2);
-		layeredPane2.setEnabled(false);
+		//layeredPane2.setEnabled(false);
 		layeredPane2.setVisible(false);
 		
 		JLabel lblEnterTrackingNo = new JLabel("Enter Tracking No : ");
@@ -175,12 +177,85 @@ public class Mainscreen extends JApplet {
 		btnCancelTrack.setBounds(411, 7, 100, 23);
 		layeredPane2.add(btnCancelTrack);
 		
+		JLabel lblNewLabel_10 = new JLabel("Sender Name");
+		lblNewLabel_10.setBounds(10, 53, 90, 14);
+		layeredPane2.add(lblNewLabel_10);
+		
+		JLabel lblReceiverName = new JLabel("Receiver Name");
+		lblReceiverName.setBounds(10, 72, 90, 14);
+		layeredPane2.add(lblReceiverName);
+		
+		JLabel lblSource = new JLabel("Source");
+		lblSource.setBounds(10, 97, 90, 14);
+		layeredPane2.add(lblSource);
+		
+		JLabel p2Sender = new JLabel("");
+		p2Sender.setBounds(120, 53, 100, 14);
+		layeredPane2.add(p2Sender);
+		
+		JLabel p2Receiver = new JLabel("");
+		p2Receiver.setBounds(120, 72, 100, 14);
+		layeredPane2.add(p2Receiver);
+		
+		JLabel p2Source = new JLabel("");
+		p2Source.setBounds(120, 97, 136, 14);
+		layeredPane2.add(p2Source);
+		
+		JLabel lblDestination = new JLabel("Destination");
+		lblDestination.setBounds(10, 115, 90, 14);
+		layeredPane2.add(lblDestination);
+		
+		JLabel p2Destination = new JLabel("");
+		p2Destination.setBounds(120, 115, 136, 14);
+		layeredPane2.add(p2Destination);
+		
+		JLabel lblWeight = new JLabel("Weight");
+		lblWeight.setBounds(307, 53, 90, 14);
+		layeredPane2.add(lblWeight);
+		
+		JLabel p2Weight = new JLabel("");
+		p2Weight.setBounds(421, 53, 90, 14);
+		layeredPane2.add(p2Weight);
+		
+		JLabel lblPackageType = new JLabel("Package type");
+		lblPackageType.setBounds(307, 72, 90, 14);
+		layeredPane2.add(lblPackageType);
+		
+		JLabel lblQuantity = new JLabel("Quantity");
+		lblQuantity.setBounds(307, 97, 90, 14);
+		layeredPane2.add(lblQuantity);
+		
+		JLabel p2Package = new JLabel("");
+		p2Package.setBounds(421, 72, 90, 14);
+		layeredPane2.add(p2Package);
+		
+		JLabel p2Quantity = new JLabel("");
+		p2Quantity.setBounds(421, 97, 90, 14);
+		layeredPane2.add(p2Quantity);
+		
+		JLabel lblStatus0 = new JLabel("");
+		lblStatus0.setBounds(10, 145, 560, 14);
+		layeredPane2.add(lblStatus0);
+		
+		//table_1 = new JTable();
+		//table_1.setBounds(10, 230, 547, -89);
+		//table_1.setVisible(false);
+		
+		//layeredPane2.add(table_1);
+		
+		
 		btnCancelTrack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnNew.setEnabled(true);
-				layeredPane2.setEnabled(false);
 				layeredPane2.setVisible(false);
 				textField.setText("");
+				p2Sender.setText("");
+				p2Receiver.setText("");
+				p2Source.setText("");
+				p2Destination.setText("");
+				p2Weight.setText("");
+				p2Package.setText("");
+				p2Quantity.setText("");
 			}
 		});
 		
@@ -188,7 +263,38 @@ public class Mainscreen extends JApplet {
 			public void actionPerformed(ActionEvent e) {
 				TrackPackage trackPackage = new TrackPackage(Integer.parseInt(textField.getText()));
 				PackageModel pm = trackPackage.getShippingDetails();
-				System.out.println(pm);
+				p2Sender.setText(pm.getSenderName());
+				p2Receiver.setText(pm.getReceiverName());
+				p2Source.setText(pm.getSource());
+				p2Destination.setText(pm.getDestination());
+				p2Weight.setText(pm.getWeight());
+				p2Package.setText(pm.getPackageType());
+				p2Quantity.setText(pm.getQuantity());
+				
+				JLabel lblStatus0 = new JLabel("");
+				lblStatus0.setBounds(10, 145, 560, 14);
+				layeredPane2.add(lblStatus0);
+				
+				if(!pm.getShippingList().isEmpty()) {
+					JFrame f=new JFrame();  
+					String data[][] = new String[pm.getShippingList().size()][3];
+					for(int i=0; i<pm.getShippingList().size(); i++) {
+						PackageShipModel sh = pm.getShippingList().get(i);
+						data[i][0]=sh.getCenterName();
+						data[i][1] = sh.getArrivalTime().toString();
+						data[i][2] = sh.getDepartureTime().toString();
+					}
+				    String column[]={"Center Name","Arrival Time","Departure Time"};         
+				    JTable jt=new JTable(data,column);    
+				    jt.setBounds(30,40,200,300);          
+				    JScrollPane sp=new JScrollPane(jt);    
+				    f.add(sp);          
+				    f.setSize(600,300);    
+				    f.setVisible(true);
+				}else {
+					lblStatus0.setText("Package in process");
+				}
+				
 			}
 		});
 		
@@ -203,7 +309,7 @@ public class Mainscreen extends JApplet {
 				comboBox_3.setSelectedIndex(-1);
 				textArea.setText("");
 				rdbtnSignatureRequired.setSelected(false);
-				layeredPane1.setVisible(false);
+				layeredPane2.setVisible(false);
 				layeredPane1.setVisible(true);
 				btnTrack.setEnabled(false);
 			}
@@ -274,9 +380,9 @@ public class Mainscreen extends JApplet {
 		
 		btnTrack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				layeredPane2.setEnabled(true);
+				layeredPane1.setVisible(false);
 				layeredPane2.setVisible(true);
-				
+				btnNew.setEnabled(false);
 			}
 		});
 	}

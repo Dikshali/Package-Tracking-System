@@ -83,11 +83,9 @@ public class Shortest implements Runnable {
 		
 	}
 	
-	public void start(){
-		System.out.println("Starting " +  packageModel.getTrackingId());
-	      if (t == null) {
-	         t = new Thread (this);
-	         t.start ();
-	      }
-    }
+	/*
+	 * public void start(){ System.out.println("Starting " +
+	 * packageModel.getTrackingId()); if (t == null) { t = new Thread (this);
+	 * t.start (); } }
+	 */
 }

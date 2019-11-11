@@ -3,7 +3,7 @@
 [![license](https://img.shields.io/github/license/Dikshali/Package-Tracking-System?style=flat-square)](https://github.com/Dikshali/Package-Tracking-System/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/Dikshali/Package-Tracking-System?style=flat-square)](https://github.com/Dikshali/Package-Tracking-System/issues)
 
-description
+An application to display tracking information for the package delivery system of FedEx. The application accepts new packets with their properties. Every active packet creates its own thread as it travels from source to destination in the system. The user will also be able to query with an input tracking number and print the tracking details of the package.
 
 ## **Technologies:**
 * Java
